@@ -1,5 +1,5 @@
 services:
-  # 3. AdGuard (DoH)
+  # AdGuard
   adguardhome:
     image: adguard/adguardhome:latest
     container_name: adguardhome

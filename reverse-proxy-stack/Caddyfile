@@ -1,16 +1,16 @@
-{
-    auto_https off
+dns.pi {
+    tls internal
+    reverse_proxy 100.101.218.97:8081
 }
-
-http://storage.pi {
+storage.pi {
+    tls internal
     reverse_proxy 100.101.218.97:8080
 }
-http://media.pi {
+media.pi {
+    tls internal
     reverse_proxy 100.101.218.97:4533
 }
-http://manage.pi {
+manage.pi {
+    tls internal
     reverse_proxy 100.101.218.97:9000
-}
-http://dns.pi {
-    reverse_proxy 100.101.218.97:8081
 }
