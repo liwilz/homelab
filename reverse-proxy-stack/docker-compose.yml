@@ -2,6 +2,8 @@ services:
   caddy:
     image: caddy:latest
     container_name: caddy
+    env_file:
+      - .env
     ports:
       - "${PI_HOST}:80:80"
       - "${PI_HOST}:443:443"

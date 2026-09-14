@@ -1,16 +1,21 @@
 dns.pi {
     tls internal
-    reverse_proxy 100.101.218.97:8081
+    reverse_proxy {$PI_HOST}:8081
 }
 storage.pi {
     tls internal
-    reverse_proxy 100.101.218.97:8080
+    reverse_proxy {$PI_HOST}:8080
 }
 media.pi {
     tls internal
-    reverse_proxy 100.101.218.97:4533
+    reverse_proxy {$PI_HOST}:4533
 }
 manage.pi {
     tls internal
-    reverse_proxy 100.101.218.97:9000
+    reverse_proxy {$PI_HOST}:9000
+}
+
+vault.pi {
+    tls internal
+    reverse_proxy {$PI_HOST}:8222
 }
