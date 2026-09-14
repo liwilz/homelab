@@ -1,0 +1,12 @@
+services:
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    ports:
+      - "${PI_HOST}:80:80"
+      - "${PI_HOST}:443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy-data:/data
+      - ./caddy-config:/config
+    restart: unless-stopped

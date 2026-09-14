@@ -1,0 +1,30 @@
+services:
+  # Proton VPN (using custom exitpi script)
+  vpn:
+    image: qmcgaw/gluetun:latest
+    container_name: vpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./wireguard:/gluetun/wireguard
+    environment:
+      - VPN_SERVICE_PROVIDER=custom
+      - VPN_TYPE=wireguard
+      - VPN_INTERFACE_VAL=wg0
+    restart: unless-stopped
+
+  # Tailscale container for exit node
+  tailscale-exit:
+    image: tailscale/tailscale:latest
+    container_name: tailscale-exit
+    network_mode: "service:vpn"
+    volumes:
+      - ./tailscale-data:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - TS_USERSPACE=true
+      - TS_EXTRA_ARGS=--advertise-exit-node --hostname=exitpi
+      - TS_STATE_DIR=/var/lib/tailscale
+    restart: unless-stopped

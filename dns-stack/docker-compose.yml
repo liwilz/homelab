@@ -1,0 +1,15 @@
+services:
+  # 3. AdGuard (DoH)
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    restart: unless-stopped
+    ports:
+      - "${PI_HOST}:53:53/tcp"
+      - "${PI_HOST}:53:53/udp"
+      - "${PI_HOST}:3000:3000/tcp"  # Setup wizard port
+      - "${PI_HOST}:8081:80/tcp"    # Final Dashboard
+    volumes:
+      - ./adguard-work:/opt/adguardhome/work
+      - ./adguard-conf:/opt/adguardhome/conf
+

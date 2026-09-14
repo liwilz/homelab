@@ -1,0 +1,16 @@
+{
+    auto_https off
+}
+
+http://storage.pi {
+    reverse_proxy 100.101.218.97:8080
+}
+http://media.pi {
+    reverse_proxy 100.101.218.97:4533
+}
+http://manage.pi {
+    reverse_proxy 100.101.218.97:9000
+}
+http://dns.pi {
+    reverse_proxy 100.101.218.97:8081
+}

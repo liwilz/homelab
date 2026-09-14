@@ -1,0 +1,10 @@
+# persistent container state — never versioned
+**/*-data/
+**/*-config/
+**/*-conf/
+**/*-work/
+
+# secrets — handled separately, not just "data"
+.env
+**/.env
+!.env.example

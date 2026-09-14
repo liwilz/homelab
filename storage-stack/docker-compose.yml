@@ -1,0 +1,35 @@
+services:
+  # FILE BROWSER (Web Interface for Mobile / Guests)
+  filebrowser:
+    image: hurlenko/filebrowser:latest
+    container_name: filebrowser
+    ports:
+      - "${PI_HOST}:8080:8080"
+    volumes:
+      # Expose the master storage root so File Browser sees everything
+      - /srv/storage:/data
+      - ./filebrowser-config:/config
+    environment:
+      - FB_BASE_URL=/
+    restart: unless-stopped
+
+  # SAMBA (Windows S:\ Drives for Family & Me)
+  samba:
+    image: ghcr.io/depau/docker-samba:main
+    container_name: samba
+    network_mode: host
+    environment:
+      - TZ=Europe/London
+      # Create 2 Samba users: "admin" and "family"
+      - USER1=admin;${SAMBA_ADMIN_PASS}
+      - USER2=family;${SAMBA_FAMILY_PASS}
+      
+      # Share 1: Shared folder (Everyone can access)
+      - SHARE1=Shared;/srv/storage/shared;no;no;no;admin,family;admin
+      # Share 2: Your private drive
+      - SHARE2=MainDrive;/srv/storage/users/main;no;no;no;admin;admin
+      # Share 3: Family private drive
+      - SHARE3=FamilyDrive;/srv/storage/users/family;no;no;no;family;admin
+    volumes:
+      - /srv/storage:/srv/storage
+    restart: unless-stopped
