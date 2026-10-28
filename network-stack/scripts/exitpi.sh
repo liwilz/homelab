@@ -8,16 +8,23 @@ CONFIG_DIR="${EXITPI_WG_DIR:-/etc/wireguard}"
 case "${1:-}" in
     off|stop|down)
         cd "$COMPOSE_DIR" && docker compose stop vpn tailscale-exit
-        echo "VPN & Exit Node stopped."
+        echo "Exit node stopped."
+        ;;
+    on)
+        cd "$COMPOSE_DIR"
+        docker compose stop vpn
+        TS_NET_MODE=host docker compose up -d --force-recreate tailscale-exit
+        echo "SUCCESS: Direct exit node enabled (no VPN tunnel)."
         ;;
     status)
         cd "$COMPOSE_DIR" && docker compose ps
         echo -e "\n--- Public IP ---"
-        docker exec vpn wget -qO- ifconfig.me 2>/dev/null || echo "VPN container is down."
+        docker exec vpn wget -qO- ifconfig.me 2>/dev/null \
+            || docker exec tailscale-exit wget -qO- ifconfig.me 2>/dev/null \
+            || echo "Exit node is down."
         ;;
     "")
-        echo "Usage: exitpi <country_code|off|status>"
-        echo "Available locations:"
+        echo "Usage: exitpi <country_code|on|off|status>"
         ls "$CONFIG_DIR"/*.conf 2>/dev/null | xargs -n1 basename | sed 's/\.conf//'
         ;;
     *)
